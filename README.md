@@ -4,7 +4,6 @@
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128-009688.svg)](https://fastapi.tiangolo.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
-[![Design: Apple Minimalist](https://img.shields.io/badge/Design-Apple.in%20Minimalist-0071e3.svg)]()
 
 > **TriageIQ** is a lightweight, production-grade defect triage, anomaly detection, and operational MIS intelligence engine. Built with an **Apple.in-inspired minimalist UI**, it automates software support incident classification, detects semantic duplicate tickets with NLP TF-IDF, discovers statistical latency anomalies using Z-scores & IQR, synchronizes structured Jira Cloud REST API v3 payloads, and generates executive multi-tab Excel MIS reports with formulas and embedded charts.
 
