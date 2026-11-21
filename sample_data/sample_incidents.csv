@@ -1,0 +1,13 @@
+ticket_id,title,description,component,severity,latency_ms,status,created_at
+RAW-101,Stripe webhook failure,HTTP 500 received on invoice payment,Payments,P1,14200,To Do,2026-11-20 08:30:00
+RAW-102,Payment charge 500 error,Checkout fails on stripe card charge,,CRITICAL,13800,To Do,2026-11-20 08:45:00
+RAW-103,Postgres deadlock in order_items,Concurrent locks crash checkout,Database,P1,17500,In Progress,2026-11-20 09:15:00
+RAW-104,JWT token expired prematurely,User logged out mid-session,Auth,high,310,To Do,2026-11-20 09:30:00
+RAW-105,Safari 17 modal backdrop flicker,CSS blur backdrop glitches on sonoma,ui,minor,120,Done,2026-11-20 10:00:00
+RAW-106,GraphQL ProductsWithStock latency high,N+1 query slowdown on stock items,API,P2,4900,In Progress,2026-11-20 10:30:00
+RAW-107,Redis cache eviction spike,Massive cache miss wave hits postgres,db,P2,5600,To Do,2026-11-20 11:00:00
+RAW-108,Missing dark mode preference persistence,Theme resets to light on reload,UI,p4,75,Done,2026-11-20 11:30:00
+RAW-109,Corrupted latency entry test,Negative latency test case,,P3,-120,To Do,2026-11-20 12:00:00
+RAW-110,Missing title and desc test row,,,,,,
+RAW-111,OAuth Google login blocked,Firefox popup blocker intercepts oauth,Auth,P2,280,In Progress,2026-11-20 12:30:00
+RAW-112,CSV export worker OOM,Heap out of memory on 50k rows export,backend,high,9100,In Progress,2026-11-20 13:00:00

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TriageIQ — AI-Powered Defect & Operational Triage Hub</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=SF+Pro+Text:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Frosted Navigation Bar -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="logo-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">TriageIQ</span>
+          <span class="brand-badge">AI Triage & MIS Engine</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-run-tests" class="btn btn-secondary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          Run pytest Suite
+        </button>
+
+        <a href="/api/export/excel" download class="btn btn-secondary" id="btn-export-excel">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download Excel MIS (.xlsx)
+        </a>
+
+        <button id="btn-seed-sample" class="btn btn-outline" title="Reset and load fresh 25 realistic incident records">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+            <path d="M21 3v5h-5"></path>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+            <path d="M3 21v-5h5"></path>
+          </svg>
+          Reset Sample Data
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- Hero / Headline -->
+    <section class="hero-section">
+      <span class="hero-eyebrow">Intelligent QA & Support Operations</span>
+      <h1 class="hero-title">Defect Triage, Anomaly Mining & Jira Sync.</h1>
+      <p class="hero-subtitle">Production-grade ETL pipeline, statistical Z-score outlier detection, semantic TF-IDF deduplication, and automated Jira REST API v3 ticket generation.</p>
+    </section>
+
+    <!-- Top KPI Cards Grid -->
+    <section class="kpi-grid">
+      <div class="card kpi-card">
+        <div class="kpi-label">Total Incidents</div>
+        <div class="kpi-value" id="kpi-total-tickets">--</div>
+        <div class="kpi-subtext">Active support & QA records</div>
+      </div>
+
+      <div class="card kpi-card">
+        <div class="kpi-label">Data Quality Score</div>
+        <div class="kpi-value" id="kpi-quality-score">--%</div>
+        <div class="kpi-subtext" id="kpi-quality-sub">ETL Cleansing & Imputation</div>
+      </div>
+
+      <div class="card kpi-card">
+        <div class="kpi-label">Duplicate Clusters</div>
+        <div class="kpi-value text-amber" id="kpi-duplicates">--</div>
+        <div class="kpi-subtext" id="kpi-duplicates-sub">TF-IDF & Cosine matches</div>
+      </div>
+
+      <div class="card kpi-card">
+        <div class="kpi-label">SLA Breach Rate</div>
+        <div class="kpi-value text-red" id="kpi-sla-rate">--%</div>
+        <div class="kpi-subtext" id="kpi-sla-sub">Breaches identified by SLA engine</div>
+      </div>
+    </section>
+
+    <!-- Two-Column Interactive Workspace -->
+    <div class="workspace-grid">
+
+      <!-- Column Left: AI Defect Triage & Jira Generator -->
+      <section class="card triage-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <span class="badge badge-blue">AI Engine</span>
+            <h2>Defect Triage & Jira Ticket Generator</h2>
+          </div>
+          <span class="panel-desc">Paste error trace, client complaint, or bug summary to classify severity and build Jira ticket</span>
+        </div>
+
+        <!-- Sample Quick Prompts -->
+        <div class="sample-chips-wrapper">
+          <span class="chips-label">Quick samples:</span>
+          <button class="chip" data-sample="Stripe checkout fails with HTTP 500 error on Visa card charge during checkout flow.">Stripe 500 Error</button>
+          <button class="chip" data-sample="Postgres deadlock detected on order_items table when 50 simultaneous flash sale checkouts execute.">Postgres Deadlock</button>
+          <button class="chip" data-sample="ExpiredSignatureError: JWT token signature validation fails after 15 minutes session refresh.">JWT Session Logout</button>
+          <button class="chip" data-sample="Safari 17 modal drawer backdrop-filter blur causing flickering on macOS Sonoma.">Safari CSS Glitch</button>
+        </div>
+
+        <form id="triage-form" class="triage-form">
+          <div class="form-group">
+            <textarea id="triage-input" placeholder="Paste raw complaint, error message, or stacktrace here..." rows="4" required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" id="btn-analyze" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              Analyze & Generate Jira Ticket
+            </button>
+            <span id="triage-loader" class="loader-spinner" style="display:none;"></span>
+          </div>
+        </form>
+
+        <!-- AI Classification Result Area -->
+        <div id="triage-result" class="triage-result" style="display:none;">
+          <div class="result-header">
+            <h3>AI Classification Results</h3>
+            <div class="result-badges">
+              <span id="res-severity" class="badge">P1 Critical</span>
+              <span id="res-component" class="badge badge-purple">Payments</span>
+              <span id="res-sla" class="badge badge-gray">SLA: 2.0h</span>
+            </div>
+          </div>
+
+          <!-- Duplicate Alert Callout (Conditional) -->
+          <div id="duplicate-alert" class="alert-box alert-warning" style="display:none;">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+              <strong>Potential Duplicate Detected:</strong>
+              <span id="dup-details">Matches existing ticket TIQ-1001 with 84.5% cosine similarity.</span>
+            </div>
+          </div>
+
+          <div class="result-details">
+            <div class="detail-block">
+              <span class="detail-label">Jira Summary:</span>
+              <p id="res-summary" class="detail-value text-bold"></p>
+            </div>
+
+            <div class="detail-block">
+              <span class="detail-label">Root Cause Hypothesis:</span>
+              <p id="res-root-cause" class="detail-value"></p>
+            </div>
+
+            <div class="detail-block">
+              <span class="detail-label">Steps to Reproduce:</span>
+              <pre id="res-steps" class="code-preview"></pre>
+            </div>
+
+            <div class="detail-block">
+              <div class="code-header">
+                <span class="detail-label">Atlassian Jira REST API v3 Payload (ADF Format):</span>
+                <button type="button" id="btn-copy-jira" class="btn-text">Copy JSON</button>
+              </div>
+              <pre id="res-jira-json" class="code-preview code-json"></pre>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button type="button" id="btn-push-jira" class="btn btn-primary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              Push to Jira Board
+            </button>
+            <span id="push-status-text" class="status-msg"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Column Right: Data Ingestion & ETL Audit Panel -->
+      <section class="card etl-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <span class="badge badge-green">ETL Pipeline</span>
+            <h2>Excel / CSV Ingestion & Quality Audit</h2>
+          </div>
+          <span class="panel-desc">Upload batch bug files to clean missing values, normalize timestamps, and flag anomalies</span>
+        </div>
+
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="file-input" accept=".csv, .xlsx, .xls" style="display:none;">
+          <div class="upload-prompt" id="upload-prompt">
+            <div class="upload-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <p class="upload-title">Drop <strong>.xlsx</strong> or <strong>.csv</strong> defect export here</p>
+            <span class="upload-subtitle">or click to browse from your machine</span>
+            <div class="upload-buttons">
+              <button type="button" class="btn btn-outline btn-sm" id="btn-browse-file">Select File</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-load-sample-etl">Load Sample Dataset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ETL Audit Report Output -->
+        <div id="etl-audit-output" class="etl-audit-output" style="display:none;">
+          <div class="audit-header">
+            <h4>Data Quality Audit Report</h4>
+            <span id="audit-score-pill" class="badge badge-green">98.5% Quality</span>
+          </div>
+
+          <div class="audit-metrics-grid">
+            <div class="audit-metric">
+              <span class="metric-num" id="audit-raw-rows">--</span>
+              <span class="metric-desc">Raw Rows Ingested</span>
+            </div>
+            <div class="audit-metric">
+              <span class="metric-num" id="audit-clean-rows">--</span>
+              <span class="metric-desc">Valid Rows Retained</span>
+            </div>
+            <div class="audit-metric">
+              <span class="metric-num text-amber" id="audit-imputed-nulls">--</span>
+              <span class="metric-desc">Null Cells Imputed</span>
+            </div>
+            <div class="audit-metric">
+              <span class="metric-num text-red" id="audit-malformed">--</span>
+              <span class="metric-desc">Malformed Rows Handled</span>
+            </div>
+          </div>
+
+          <div id="audit-breakdown-details" class="audit-breakdown-details"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Data Mining, Anomaly Detection & Failure Hotspots -->
+    <section class="card insights-panel">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="badge badge-orange">Data Mining Engine</span>
+          <h2>Statistical Anomalies & Failure Hotspots</h2>
+        </div>
+        <span class="panel-desc">Z-score latency spikes (>2.0σ), IQR outlier thresholds, and high-risk module clusters</span>
+      </div>
+
+      <div class="insights-grid">
+        <!-- Latency Spikes Table -->
+        <div class="insight-column">
+          <div class="sub-panel-title">
+            <span>Latency Spikes (Z-Score Outliers)</span>
+            <span id="latency-anomalies-count" class="pill-count">0 Detected</span>
+          </div>
+          <div class="table-container">
+            <table class="data-table" id="table-latency-anomalies">
+              <thead>
+                <tr>
+                  <th>Ticket</th>
+                  <th>Title</th>
+                  <th>Component</th>
+                  <th>Latency</th>
+                  <th>Z-Score</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-latency-anomalies">
+                <tr><td colspan="5" class="empty-cell">Loading anomalies...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Failure Hotspots -->
+        <div class="insight-column">
+          <div class="sub-panel-title">
+            <span>Component Defect Hotspots & SLA Risks</span>
+            <span class="pill-count">5 Modules</span>
+          </div>
+          <div class="table-container">
+            <table class="data-table" id="table-hotspots">
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Total Defects</th>
+                  <th>P1 Critical</th>
+                  <th>SLA Breaches</th>
+                  <th>Risk Level</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-hotspots">
+                <tr><td colspan="5" class="empty-cell">Loading hotspots...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Jira Triage Board -->
+    <section class="card jira-board-panel">
+      <div class="panel-header jira-board-header">
+        <div class="panel-title-group">
+          <span class="badge badge-blue">Workflow Sync</span>
+          <h2>Interactive Jira Triage Board</h2>
+        </div>
+        <div class="board-filters">
+          <input type="text" id="board-search" placeholder="Filter tickets by title or component..." class="search-input">
+          <span id="board-total-count" class="badge badge-gray">25 Tickets</span>
+        </div>
+      </div>
+
+      <div class="kanban-board" id="kanban-board">
+        <!-- Columns rendered dynamically: To Do, In Progress, QA Verification, Done -->
+        <div class="kanban-column" data-status="To Do">
+          <div class="column-header">
+            <span class="column-title">To Do</span>
+            <span class="column-count" id="count-todo">0</span>
+          </div>
+          <div class="cards-list" id="col-todo"></div>
+        </div>
+
+        <div class="kanban-column" data-status="In Progress">
+          <div class="column-header">
+            <span class="column-title">In Progress</span>
+            <span class="column-count" id="count-inprogress">0</span>
+          </div>
+          <div class="cards-list" id="col-inprogress"></div>
+        </div>
+
+        <div class="kanban-column" data-status="QA Verification">
+          <div class="column-header">
+            <span class="column-title">QA Verification</span>
+            <span class="column-count" id="count-qa">0</span>
+          </div>
+          <div class="cards-list" id="col-qa"></div>
+        </div>
+
+        <div class="kanban-column" data-status="Done">
+          <div class="column-header">
+            <span class="column-title">Done</span>
+            <span class="column-count" id="count-done">0</span>
+          </div>
+          <div class="cards-list" id="col-done"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal for Test Suite Results -->
+  <div id="test-modal" class="modal-backdrop" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="badge badge-green">Automated Verification</span>
+          <h3>Pytest Test Suite Execution</h3>
+        </div>
+        <button id="btn-close-modal" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="test-modal-status" class="test-status-banner">Running pytest in virtual environment...</div>
+        <pre id="test-modal-log" class="test-terminal-log">Executing pytest -v...</pre>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-modal-done" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span>TriageIQ &copy; 2026. Production-Grade AI Defect & Operational Triage Hub.</span>
+      <span class="footer-tech">FastAPI &bull; Pandas ETL &bull; Scikit-Learn TF-IDF &bull; OpenPyXL MIS &bull; Jira v3 REST</span>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
