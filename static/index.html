@@ -11,7 +11,7 @@
 </head>
 <body>
 
-  <!-- Frosted Navigation Bar -->
+  <!-- 1. Persistent Top Area: Frosted Sticky Navigation Bar -->
   <header class="app-header">
     <div class="header-inner">
       <div class="brand-group">
@@ -59,14 +59,14 @@
   <!-- Main Container -->
   <main class="main-content">
 
-    <!-- Hero / Headline -->
-    <section class="hero-section">
+    <!-- 1. Persistent Top Area: Compact Hero Section -->
+    <section class="hero-section compact-hero">
       <span class="hero-eyebrow">Intelligent QA & Support Operations</span>
       <h1 class="hero-title">Defect Triage, Anomaly Mining & Jira Sync.</h1>
       <p class="hero-subtitle">Production-grade ETL pipeline, statistical Z-score outlier detection, semantic TF-IDF deduplication, and automated Jira REST API v3 ticket generation.</p>
     </section>
 
-    <!-- Top KPI Cards Grid -->
+    <!-- 1. Persistent Top Area: 4 Summary KPI Cards Grid -->
     <section class="kpi-grid">
       <div class="card kpi-card">
         <div class="kpi-label">Total Incidents</div>
@@ -93,270 +93,378 @@
       </div>
     </section>
 
-    <!-- Two-Column Interactive Workspace -->
-    <div class="workspace-grid">
+    <!-- 2. Apple-Style Segmented Tab Navigation Bar -->
+    <section class="segmented-control-wrapper">
+      <nav class="segmented-control" role="tablist" aria-label="TriageIQ Workspace Navigation">
+        <button class="segmented-tab active" data-tab="tab-triage" role="tab" aria-selected="true" id="tab-btn-triage">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>AI Triage & Jira</span>
+        </button>
 
-      <!-- Column Left: AI Defect Triage & Jira Generator -->
-      <section class="card triage-panel">
-        <div class="panel-header">
-          <div class="panel-title-group">
-            <span class="badge badge-blue">AI Engine</span>
-            <h2>Defect Triage & Jira Ticket Generator</h2>
-          </div>
-          <span class="panel-desc">Paste error trace, client complaint, or bug summary to classify severity and build Jira ticket</span>
-        </div>
+        <button class="segmented-tab" data-tab="tab-etl" role="tab" aria-selected="false" id="tab-btn-etl">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Excel & ETL Audit</span>
+        </button>
 
-        <!-- Sample Quick Prompts -->
-        <div class="sample-chips-wrapper">
-          <span class="chips-label">Quick samples:</span>
-          <button class="chip" data-sample="Stripe checkout fails with HTTP 500 error on Visa card charge during checkout flow.">Stripe 500 Error</button>
-          <button class="chip" data-sample="Postgres deadlock detected on order_items table when 50 simultaneous flash sale checkouts execute.">Postgres Deadlock</button>
-          <button class="chip" data-sample="ExpiredSignatureError: JWT token signature validation fails after 15 minutes session refresh.">JWT Session Logout</button>
-          <button class="chip" data-sample="Safari 17 modal drawer backdrop-filter blur causing flickering on macOS Sonoma.">Safari CSS Glitch</button>
-        </div>
+        <button class="segmented-tab" data-tab="tab-anomalies" role="tab" aria-selected="false" id="tab-btn-anomalies">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <span>Data Mining & Anomalies</span>
+          <span class="tab-badge" id="badge-anomalies">0</span>
+        </button>
 
-        <form id="triage-form" class="triage-form">
-          <div class="form-group">
-            <textarea id="triage-input" placeholder="Paste raw complaint, error message, or stacktrace here..." rows="4" required></textarea>
-          </div>
-          <div class="form-actions">
-            <button type="submit" id="btn-analyze" class="btn btn-primary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              Analyze & Generate Jira Ticket
-            </button>
-            <span id="triage-loader" class="loader-spinner" style="display:none;"></span>
-          </div>
-        </form>
+        <button class="segmented-tab" data-tab="tab-jira" role="tab" aria-selected="false" id="tab-btn-jira">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+          </svg>
+          <span>Jira Board</span>
+          <span class="tab-badge" id="badge-jira-board">0</span>
+        </button>
+      </nav>
+    </section>
 
-        <!-- AI Classification Result Area -->
-        <div id="triage-result" class="triage-result" style="display:none;">
-          <div class="result-header">
-            <h3>AI Classification Results</h3>
-            <div class="result-badges">
-              <span id="res-severity" class="badge">P1 Critical</span>
-              <span id="res-component" class="badge badge-purple">Payments</span>
-              <span id="res-sla" class="badge badge-gray">SLA: 2.0h</span>
-            </div>
-          </div>
+    <!-- Workspace Tab Panes (One workspace displayed at a time) -->
+    <div class="tab-panes-container">
 
-          <!-- Duplicate Alert Callout (Conditional) -->
-          <div id="duplicate-alert" class="alert-box alert-warning" style="display:none;">
-            <div class="alert-icon">⚠️</div>
-            <div class="alert-content">
-              <strong>Potential Duplicate Detected:</strong>
-              <span id="dup-details">Matches existing ticket TIQ-1001 with 84.5% cosine similarity.</span>
-            </div>
-          </div>
+      <!-- ================= TAB 1: AI Triage & Jira (Default Active) ================= -->
+      <div class="tab-pane active" id="tab-triage" role="tabpanel" aria-labelledby="tab-btn-triage">
+        <div class="workspace-grid triage-split-grid">
 
-          <div class="result-details">
-            <div class="detail-block">
-              <span class="detail-label">Jira Summary:</span>
-              <p id="res-summary" class="detail-value text-bold"></p>
-            </div>
-
-            <div class="detail-block">
-              <span class="detail-label">Root Cause Hypothesis:</span>
-              <p id="res-root-cause" class="detail-value"></p>
-            </div>
-
-            <div class="detail-block">
-              <span class="detail-label">Steps to Reproduce:</span>
-              <pre id="res-steps" class="code-preview"></pre>
-            </div>
-
-            <div class="detail-block">
-              <div class="code-header">
-                <span class="detail-label">Atlassian Jira REST API v3 Payload (ADF Format):</span>
-                <button type="button" id="btn-copy-jira" class="btn-text">Copy JSON</button>
+          <!-- Left Column: Defect Triage Input & Quick Chips -->
+          <section class="card triage-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <span class="badge badge-blue">AI Engine</span>
+                <h2>Defect Triage & Jira Ticket Generator</h2>
               </div>
-              <pre id="res-jira-json" class="code-preview code-json"></pre>
+              <span class="panel-desc">Paste error trace, client complaint, or bug summary to classify severity and build Jira ticket</span>
             </div>
-          </div>
 
-          <div class="result-actions">
-            <button type="button" id="btn-push-jira" class="btn btn-primary">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 5v14M5 12h14"/>
-              </svg>
-              Push to Jira Board
-            </button>
-            <span id="push-status-text" class="status-msg"></span>
-          </div>
+            <!-- Sample Quick Prompts -->
+            <div class="sample-chips-wrapper">
+              <span class="chips-label">Quick samples:</span>
+              <button class="chip" data-sample="Stripe checkout fails with HTTP 500 error on Visa card charge during checkout flow.">Stripe 500 Error</button>
+              <button class="chip" data-sample="Postgres deadlock detected on order_items table when 50 simultaneous flash sale checkouts execute.">Postgres Deadlock</button>
+              <button class="chip" data-sample="ExpiredSignatureError: JWT token signature validation fails after 15 minutes session refresh.">JWT Session Logout</button>
+              <button class="chip" data-sample="Safari 17 modal drawer backdrop-filter blur causing flickering on macOS Sonoma.">Safari CSS Glitch</button>
+            </div>
+
+            <form id="triage-form" class="triage-form">
+              <div class="form-group">
+                <textarea id="triage-input" placeholder="Paste raw complaint, error message, or stacktrace here..." rows="5" required></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" id="btn-analyze" class="btn btn-primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  Analyze & Generate Jira Ticket
+                </button>
+                <span id="triage-loader" class="loader-spinner" style="display:none;"></span>
+              </div>
+            </form>
+          </section>
+
+          <!-- Right Column: AI Classification Results & Jira v3 Payload -->
+          <section class="card triage-output-card" id="triage-output-card">
+            <!-- Placeholder visible before analysis is executed -->
+            <div id="triage-placeholder" class="card-empty-placeholder">
+              <div class="placeholder-icon">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+              </div>
+              <h3>Ready for AI Triage</h3>
+              <p>Enter an error trace or click any sample prompt on the left to trigger instant component prediction, TF-IDF duplicate detection, and Jira REST v3 payload generation.</p>
+            </div>
+
+            <!-- Active AI Classification Result Area -->
+            <div id="triage-result" class="triage-result" style="display:none;">
+              <div class="result-header">
+                <div>
+                  <h3 style="font-size: 16px; font-weight: 600;">AI Classification Results</h3>
+                  <span style="font-size: 12px; color: var(--text-secondary);">Verified against active system tickets</span>
+                </div>
+                <div class="result-badges">
+                  <span id="res-severity" class="badge">P1 Critical</span>
+                  <span id="res-component" class="badge badge-purple">Payments</span>
+                  <span id="res-sla" class="badge badge-gray">SLA: 2.0h</span>
+                </div>
+              </div>
+
+              <!-- Duplicate Alert Callout (Conditional) -->
+              <div id="duplicate-alert" class="alert-box alert-warning" style="display:none;">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                  <strong>Potential Duplicate Detected:</strong>
+                  <span id="dup-details">Matches existing ticket TIQ-1001 with 84.5% cosine similarity.</span>
+                </div>
+              </div>
+
+              <div class="result-details">
+                <div class="detail-block">
+                  <span class="detail-label">Jira Summary:</span>
+                  <p id="res-summary" class="detail-value text-bold"></p>
+                </div>
+
+                <div class="detail-block">
+                  <span class="detail-label">Root Cause Hypothesis:</span>
+                  <p id="res-root-cause" class="detail-value"></p>
+                </div>
+
+                <div class="detail-block">
+                  <span class="detail-label">Steps to Reproduce:</span>
+                  <pre id="res-steps" class="code-preview"></pre>
+                </div>
+
+                <div class="detail-block">
+                  <div class="code-header">
+                    <span class="detail-label">Atlassian Jira REST API v3 Payload (ADF Format):</span>
+                    <button type="button" id="btn-copy-jira" class="btn-text">Copy JSON</button>
+                  </div>
+                  <pre id="res-jira-json" class="code-preview code-json"></pre>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" id="btn-push-jira" class="btn btn-primary">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M5 12h14"/>
+                  </svg>
+                  Push to Jira Board
+                </button>
+                <span id="push-status-text" class="status-msg"></span>
+              </div>
+            </div>
+          </section>
+
         </div>
-      </section>
+      </div>
 
-      <!-- Column Right: Data Ingestion & ETL Audit Panel -->
-      <section class="card etl-panel">
-        <div class="panel-header">
-          <div class="panel-title-group">
-            <span class="badge badge-green">ETL Pipeline</span>
-            <h2>Excel / CSV Ingestion & Quality Audit</h2>
-          </div>
-          <span class="panel-desc">Upload batch bug files to clean missing values, normalize timestamps, and flag anomalies</span>
+      <!-- ================= TAB 2: Excel & ETL Audit ================= -->
+      <div class="tab-pane" id="tab-etl" role="tabpanel" aria-labelledby="tab-btn-etl" style="display:none;">
+        <div class="workspace-grid etl-split-grid">
+
+          <!-- Left Column: Ingestion Uploader -->
+          <section class="card etl-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <span class="badge badge-green">ETL Pipeline</span>
+                <h2>Excel / CSV Ingestion Engine</h2>
+              </div>
+              <span class="panel-desc">Upload batch bug exports to clean missing values, normalize timestamps, and flag anomalies</span>
+            </div>
+
+            <div class="upload-zone" id="upload-zone">
+              <input type="file" id="file-input" accept=".csv, .xlsx, .xls" style="display:none;">
+              <div class="upload-prompt" id="upload-prompt">
+                <div class="upload-icon">
+                  <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <p class="upload-title">Drop <strong>.xlsx</strong> or <strong>.csv</strong> defect export here</p>
+                <span class="upload-subtitle">or click to browse from your machine</span>
+                <div class="upload-buttons">
+                  <button type="button" class="btn btn-outline btn-sm" id="btn-browse-file">Select File</button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-load-sample-etl">Load Sample Dataset</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="etl-rules-summary">
+              <span class="rules-title">Automated Sanitization Rules:</span>
+              <ul class="rules-list">
+                <li>Imputes missing components using NLP keyword inference</li>
+                <li>Fills unrecorded latencies with category median values</li>
+                <li>Standardizes timestamps to ISO-8601 UTC formats</li>
+                <li>Identifies and flags negative latencies or malformed rows</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Right Column: Data Quality Audit Report -->
+          <section class="card etl-audit-card">
+            <!-- Placeholder before audit output -->
+            <div id="etl-placeholder" class="card-empty-placeholder">
+              <div class="placeholder-icon">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 11 12 14 22 4"></polyline>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+              </div>
+              <h3>Data Quality Audit Report</h3>
+              <p>Upload a spreadsheet or click "Load Sample Dataset" to see a live audit breakdown of imputed fields, retention rates, and the Data Quality Score %.</p>
+            </div>
+
+            <!-- Active ETL Audit Report Output -->
+            <div id="etl-audit-output" class="etl-audit-output" style="display:none;">
+              <div class="audit-header">
+                <div>
+                  <h4 style="font-size: 16px; font-weight: 600;">Data Quality Audit Report</h4>
+                  <span style="font-size: 12px; color: var(--text-secondary);">Real-time ETL validation metrics</span>
+                </div>
+                <span id="audit-score-pill" class="badge badge-green">98.5% Quality</span>
+              </div>
+
+              <div class="audit-metrics-grid">
+                <div class="audit-metric">
+                  <span class="metric-num" id="audit-raw-rows">--</span>
+                  <span class="metric-desc">Raw Rows Ingested</span>
+                </div>
+                <div class="audit-metric">
+                  <span class="metric-num" id="audit-clean-rows">--</span>
+                  <span class="metric-desc">Valid Rows Retained</span>
+                </div>
+                <div class="audit-metric">
+                  <span class="metric-num text-amber" id="audit-imputed-nulls">--</span>
+                  <span class="metric-desc">Null Cells Imputed</span>
+                </div>
+                <div class="audit-metric">
+                  <span class="metric-num text-red" id="audit-malformed">--</span>
+                  <span class="metric-desc">Malformed Rows Handled</span>
+                </div>
+              </div>
+
+              <div id="audit-breakdown-details" class="audit-breakdown-details"></div>
+            </div>
+          </section>
+
         </div>
+      </div>
 
-        <div class="upload-zone" id="upload-zone">
-          <input type="file" id="file-input" accept=".csv, .xlsx, .xls" style="display:none;">
-          <div class="upload-prompt" id="upload-prompt">
-            <div class="upload-icon">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
-              </svg>
+      <!-- ================= TAB 3: Data Mining & Anomalies ================= -->
+      <div class="tab-pane" id="tab-anomalies" role="tabpanel" aria-labelledby="tab-btn-anomalies" style="display:none;">
+        <section class="card insights-panel">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <span class="badge badge-orange">Data Mining Engine</span>
+              <h2>Statistical Anomalies & Failure Hotspots</h2>
             </div>
-            <p class="upload-title">Drop <strong>.xlsx</strong> or <strong>.csv</strong> defect export here</p>
-            <span class="upload-subtitle">or click to browse from your machine</span>
-            <div class="upload-buttons">
-              <button type="button" class="btn btn-outline btn-sm" id="btn-browse-file">Select File</button>
-              <button type="button" class="btn btn-secondary btn-sm" id="btn-load-sample-etl">Load Sample Dataset</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ETL Audit Report Output -->
-        <div id="etl-audit-output" class="etl-audit-output" style="display:none;">
-          <div class="audit-header">
-            <h4>Data Quality Audit Report</h4>
-            <span id="audit-score-pill" class="badge badge-green">98.5% Quality</span>
+            <span class="panel-desc">Z-score latency spikes (&ge;1.95&sigma;), IQR outlier thresholds, and high-risk module failure clusters</span>
           </div>
 
-          <div class="audit-metrics-grid">
-            <div class="audit-metric">
-              <span class="metric-num" id="audit-raw-rows">--</span>
-              <span class="metric-desc">Raw Rows Ingested</span>
+          <div class="insights-grid">
+            <!-- Latency Spikes Table -->
+            <div class="insight-column">
+              <div class="sub-panel-title">
+                <span>Latency Spikes (Z-Score Outliers)</span>
+                <span id="latency-anomalies-count" class="pill-count">0 Detected</span>
+              </div>
+              <div class="table-container">
+                <table class="data-table" id="table-latency-anomalies">
+                  <thead>
+                    <tr>
+                      <th>Ticket</th>
+                      <th>Title</th>
+                      <th>Component</th>
+                      <th>Latency</th>
+                      <th>Z-Score</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-latency-anomalies">
+                    <tr><td colspan="5" class="empty-cell">Loading anomalies...</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="audit-metric">
-              <span class="metric-num" id="audit-clean-rows">--</span>
-              <span class="metric-desc">Valid Rows Retained</span>
+
+            <!-- Failure Hotspots -->
+            <div class="insight-column">
+              <div class="sub-panel-title">
+                <span>Component Defect Hotspots & SLA Risks</span>
+                <span class="pill-count">5 Modules</span>
+              </div>
+              <div class="table-container">
+                <table class="data-table" id="table-hotspots">
+                  <thead>
+                    <tr>
+                      <th>Component</th>
+                      <th>Total Defects</th>
+                      <th>P1 Critical</th>
+                      <th>SLA Breaches</th>
+                      <th>Risk Level</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-hotspots">
+                    <tr><td colspan="5" class="empty-cell">Loading hotspots...</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="audit-metric">
-              <span class="metric-num text-amber" id="audit-imputed-nulls">--</span>
-              <span class="metric-desc">Null Cells Imputed</span>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= TAB 4: Jira Board ================= -->
+      <div class="tab-pane" id="tab-jira" role="tabpanel" aria-labelledby="tab-btn-jira" style="display:none;">
+        <section class="card jira-board-panel">
+          <div class="panel-header jira-board-header">
+            <div class="panel-title-group">
+              <span class="badge badge-blue">Workflow Sync</span>
+              <h2>Interactive Jira Triage Board</h2>
             </div>
-            <div class="audit-metric">
-              <span class="metric-num text-red" id="audit-malformed">--</span>
-              <span class="metric-desc">Malformed Rows Handled</span>
+            <div class="board-filters">
+              <input type="text" id="board-search" placeholder="Filter tickets by title or component..." class="search-input">
+              <span id="board-total-count" class="badge badge-gray">25 Tickets</span>
             </div>
           </div>
 
-          <div id="audit-breakdown-details" class="audit-breakdown-details"></div>
-        </div>
-      </section>
+          <div class="kanban-board" id="kanban-board">
+            <!-- Columns rendered dynamically: To Do, In Progress, QA Verification, Done -->
+            <div class="kanban-column" data-status="To Do">
+              <div class="column-header">
+                <span class="column-title">To Do</span>
+                <span class="column-count" id="count-todo">0</span>
+              </div>
+              <div class="cards-list" id="col-todo"></div>
+            </div>
+
+            <div class="kanban-column" data-status="In Progress">
+              <div class="column-header">
+                <span class="column-title">In Progress</span>
+                <span class="column-count" id="count-inprogress">0</span>
+              </div>
+              <div class="cards-list" id="col-inprogress"></div>
+            </div>
+
+            <div class="kanban-column" data-status="QA Verification">
+              <div class="column-header">
+                <span class="column-title">QA Verification</span>
+                <span class="column-count" id="count-qa">0</span>
+              </div>
+              <div class="cards-list" id="col-qa"></div>
+            </div>
+
+            <div class="kanban-column" data-status="Done">
+              <div class="column-header">
+                <span class="column-title">Done</span>
+                <span class="column-count" id="count-done">0</span>
+              </div>
+              <div class="cards-list" id="col-done"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
     </div>
-
-    <!-- Data Mining, Anomaly Detection & Failure Hotspots -->
-    <section class="card insights-panel">
-      <div class="panel-header">
-        <div class="panel-title-group">
-          <span class="badge badge-orange">Data Mining Engine</span>
-          <h2>Statistical Anomalies & Failure Hotspots</h2>
-        </div>
-        <span class="panel-desc">Z-score latency spikes (>2.0σ), IQR outlier thresholds, and high-risk module clusters</span>
-      </div>
-
-      <div class="insights-grid">
-        <!-- Latency Spikes Table -->
-        <div class="insight-column">
-          <div class="sub-panel-title">
-            <span>Latency Spikes (Z-Score Outliers)</span>
-            <span id="latency-anomalies-count" class="pill-count">0 Detected</span>
-          </div>
-          <div class="table-container">
-            <table class="data-table" id="table-latency-anomalies">
-              <thead>
-                <tr>
-                  <th>Ticket</th>
-                  <th>Title</th>
-                  <th>Component</th>
-                  <th>Latency</th>
-                  <th>Z-Score</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-latency-anomalies">
-                <tr><td colspan="5" class="empty-cell">Loading anomalies...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Failure Hotspots -->
-        <div class="insight-column">
-          <div class="sub-panel-title">
-            <span>Component Defect Hotspots & SLA Risks</span>
-            <span class="pill-count">5 Modules</span>
-          </div>
-          <div class="table-container">
-            <table class="data-table" id="table-hotspots">
-              <thead>
-                <tr>
-                  <th>Component</th>
-                  <th>Total Defects</th>
-                  <th>P1 Critical</th>
-                  <th>SLA Breaches</th>
-                  <th>Risk Level</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-hotspots">
-                <tr><td colspan="5" class="empty-cell">Loading hotspots...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Interactive Jira Triage Board -->
-    <section class="card jira-board-panel">
-      <div class="panel-header jira-board-header">
-        <div class="panel-title-group">
-          <span class="badge badge-blue">Workflow Sync</span>
-          <h2>Interactive Jira Triage Board</h2>
-        </div>
-        <div class="board-filters">
-          <input type="text" id="board-search" placeholder="Filter tickets by title or component..." class="search-input">
-          <span id="board-total-count" class="badge badge-gray">25 Tickets</span>
-        </div>
-      </div>
-
-      <div class="kanban-board" id="kanban-board">
-        <!-- Columns rendered dynamically: To Do, In Progress, QA Verification, Done -->
-        <div class="kanban-column" data-status="To Do">
-          <div class="column-header">
-            <span class="column-title">To Do</span>
-            <span class="column-count" id="count-todo">0</span>
-          </div>
-          <div class="cards-list" id="col-todo"></div>
-        </div>
-
-        <div class="kanban-column" data-status="In Progress">
-          <div class="column-header">
-            <span class="column-title">In Progress</span>
-            <span class="column-count" id="count-inprogress">0</span>
-          </div>
-          <div class="cards-list" id="col-inprogress"></div>
-        </div>
-
-        <div class="kanban-column" data-status="QA Verification">
-          <div class="column-header">
-            <span class="column-title">QA Verification</span>
-            <span class="column-count" id="count-qa">0</span>
-          </div>
-          <div class="cards-list" id="col-qa"></div>
-        </div>
-
-        <div class="kanban-column" data-status="Done">
-          <div class="column-header">
-            <span class="column-title">Done</span>
-            <span class="column-count" id="count-done">0</span>
-          </div>
-          <div class="cards-list" id="col-done"></div>
-        </div>
-      </div>
-    </section>
 
   </main>
 

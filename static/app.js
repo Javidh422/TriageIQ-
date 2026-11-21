@@ -18,11 +18,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const boardSearch = document.getElementById("board-search");
   const boardTotalCount = document.getElementById("board-total-count");
 
+  // Tab Navigation Elements
+  const segmentedTabs = document.querySelectorAll(".segmented-tab");
+  const tabPanes = document.querySelectorAll(".tab-pane");
+  const badgeAnomalies = document.getElementById("badge-anomalies");
+  const badgeJiraBoard = document.getElementById("badge-jira-board");
+
   // Triage Elements
   const triageForm = document.getElementById("triage-form");
   const triageInput = document.getElementById("triage-input");
   const triageLoader = document.getElementById("triage-loader");
   const triageResult = document.getElementById("triage-result");
+  const triagePlaceholder = document.getElementById("triage-placeholder");
   const resSeverity = document.getElementById("res-severity");
   const resComponent = document.getElementById("res-component");
   const resSla = document.getElementById("res-sla");
@@ -43,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnLoadSampleEtl = document.getElementById("btn-load-sample-etl");
   const btnSeedSample = document.getElementById("btn-seed-sample");
   const etlAuditOutput = document.getElementById("etl-audit-output");
+  const etlPlaceholder = document.getElementById("etl-placeholder");
   const auditScorePill = document.getElementById("audit-score-pill");
   const auditRawRows = document.getElementById("audit-raw-rows");
   const auditCleanRows = document.getElementById("audit-clean-rows");
@@ -62,6 +70,32 @@ document.addEventListener("DOMContentLoaded", () => {
   let allJiraTickets = [];
   let currentTriageAnalysis = null;
 
+  // --- 1. Tab Switching Controller ---
+  function switchTab(targetTabId) {
+    segmentedTabs.forEach(tab => {
+      const isMatch = tab.getAttribute("data-tab") === targetTabId;
+      tab.classList.toggle("active", isMatch);
+      tab.setAttribute("aria-selected", isMatch ? "true" : "false");
+    });
+
+    tabPanes.forEach(pane => {
+      if (pane.id === targetTabId) {
+        pane.style.display = "block";
+        pane.classList.add("active");
+      } else {
+        pane.style.display = "none";
+        pane.classList.remove("active");
+      }
+    });
+  }
+
+  segmentedTabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const targetId = tab.getAttribute("data-tab");
+      switchTab(targetId);
+    });
+  });
+
   // --- Initial Data Load ---
   fetchOverview();
 
@@ -77,6 +111,15 @@ document.addEventListener("DOMContentLoaded", () => {
       kpiQuality.textContent = `${data.kpis.data_quality_score_pct || 98}%`;
       kpiDuplicates.textContent = data.duplicate_clusters.length || 0;
       kpiSla.textContent = `${data.kpis.sla_breach_rate_pct || 0}%`;
+
+      // Update Tab Badges
+      const anomalyTotal = (data.anomalies.latency_anomalies_count || 0) + (data.anomalies.total_sla_breaches || 0);
+      if (badgeAnomalies) {
+        badgeAnomalies.textContent = anomalyTotal;
+      }
+      if (badgeJiraBoard) {
+        badgeJiraBoard.textContent = data.jira_board_tickets ? data.jira_board_tickets.length : (data.kpis.total_tickets || 0);
+      }
 
       // Update Latency Outliers Table
       renderLatencyAnomalies(data.anomalies.latency_anomalies || []);
@@ -145,6 +188,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     boardTotalCount.textContent = `${filtered.length} Tickets`;
+    if (badgeJiraBoard) {
+      badgeJiraBoard.textContent = filtered.length;
+    }
 
     const cols = {
       "To Do": [],
@@ -271,6 +317,8 @@ document.addEventListener("DOMContentLoaded", () => {
         duplicateAlert.style.display = "none";
       }
 
+      // Toggle display
+      if (triagePlaceholder) triagePlaceholder.style.display = "none";
       triageResult.style.display = "block";
       showToast("Defect analyzed and classified successfully!");
 
@@ -306,6 +354,13 @@ document.addEventListener("DOMContentLoaded", () => {
       pushStatusText.textContent = `Synced as ${data.ticket_id} to Jira board!`;
       showToast(`Pushed to Jira board: ${data.ticket_id}`);
       fetchOverview();
+
+      // Offer smooth navigation to the Jira Board tab
+      setTimeout(() => {
+        showToast(`Viewing ${data.ticket_id} in Jira Board...`);
+        switchTab("tab-jira");
+      }, 1200);
+
     } catch (err) {
       pushStatusText.textContent = "Failed to sync: " + err.message;
       showToast(err.message, "error");
@@ -402,6 +457,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderAuditReport(audit) {
     if (!audit) return;
+    if (etlPlaceholder) etlPlaceholder.style.display = "none";
     etlAuditOutput.style.display = "block";
     auditScorePill.textContent = `${audit.data_quality_score_pct}% Quality`;
     auditRawRows.textContent = audit.total_rows_raw;
@@ -416,7 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     auditBreakdownDetails.innerHTML = `
       <div><strong>Imputed Fields:</strong> ${imputedEntries || 'None'}</div>
-      <div><strong>Sanitization Rules Applied:</strong> Timestamp standardization, negative latency reset to median, component keyword inference, and P1-P4 normalization.</div>
+      <div style="margin-top:6px;"><strong>Sanitization Rules Applied:</strong> Timestamp standardization, negative latency reset to median, component keyword inference, and P1-P4 normalization.</div>
     `;
   }
 
